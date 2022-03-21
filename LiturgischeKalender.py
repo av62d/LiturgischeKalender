@@ -113,13 +113,13 @@ class LiturgicalCalendar():
         # print("generating cal for {}".format(self.year))
 
         nieuwjaar = datetime(self.year, 1, 1, 10, 0)
-        self.oudjaar = datetime(self.year, 12, 31, 19,30)
+        oudjaar = datetime(self.year, 12, 31, 19,30)
        
 
         self.setOfSundays = rrule(freq=DAILY,
                                   byweekday=(SU),
                                   dtstart=nieuwjaar,
-                                  until=self.oudjaar)
+                                  until=oudjaar)
 
         self.epifanie = datetime(self.year, 1, 6)
 
@@ -152,7 +152,7 @@ class LiturgicalCalendar():
         sundaysOfSummer = self.setOfSundays.between(self.beginZomer,self.eindeZomer,inc=True)
         sundaysOfFall = self.setOfSundays.between(self.eindeZomer,self.eersteAdvent,inc=False)
         sundaysOfAdvent = self.setOfSundays.between(self.eersteAdvent,self.vierdeAdvent,inc=True)
-        sundaysOfChristmasDecember = self.setOfSundays.between(self.kerstmis,self.oudjaar,inc=True)
+        sundaysOfChristmasDecember = self.setOfSundays.between(self.kerstmis,oudjaar,inc=True)
 
         self.addDay(nieuwjaar, ColorType.WHITE, "Nieuwjaar")
 
@@ -264,7 +264,7 @@ class LiturgicalCalendar():
             self.addDay(s, ColorType.WHITE,  "zondag van het kerstoctaaf".format(i))
         
                 
-        self.addDay(self.oudjaar, ColorType.WHITE,  "Oudjaar")
+        self.addDay(oudjaar, ColorType.WHITE,  "Oudjaar")
 
         # sort all dates
         self.dayList.sort(key=lambda x: (x.dt.month, x.dt.day))
@@ -439,7 +439,7 @@ set_liturgical_color($litcol_light,$litcol_dark, $litcol_font);
 def main():
 
     year = date.today().year
-    for y in range(year, year+5):
+    for y in range(year, year+2):
         cal = LiturgicalCalendar(y)
         cal.genPHPLiturgicalCalendar()
         cal.genTXTLiturgicalCalendar()
