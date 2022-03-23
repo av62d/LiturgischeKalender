@@ -471,7 +471,7 @@ set_liturgical_color($litcol_light,$litcol_dark, $litcol_font);
 
 def main():
 
-    year = date.today().year
+    year = 2020
     for y in range(year, year+10):
         cal = LiturgicalCalendar(y)
         cal.genPHPLiturgicalCalendar()
