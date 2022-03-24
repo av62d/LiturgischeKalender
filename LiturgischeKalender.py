@@ -330,12 +330,19 @@ class LiturgicalCalendar():
         worksheet.write('A1', 'Datum', bold)
         worksheet.write('B1', 'Kleur', bold)
         worksheet.write('C1', 'Beschrijving', bold)
-        date_format = workbook.add_format({'num_format': 'ddd d mmm yy HH:MM'})
-        col_red = workbook.add_format({'bg_color': 'red'})
-        col_green = workbook.add_format({'bg_color': 'green'})
-        col_white = workbook.add_format({'bg_color': 'white'})
-        col_purple = workbook.add_format({'bg_color': 'purple'})
-        col_rosa = workbook.add_format({'bg_color': 'rosa'})
+        date_format = workbook.add_format({'num_format': 'ddd d mmm yy'})
+
+        col_red = workbook.add_format(
+            {'bold': True, 'font_color': 'white', 'bg_color': '#FF0000'})
+        col_green = workbook.add_format(
+            {'bold': True, 'font_color': 'white', 'bg_color': '#76933C'})
+        col_white = workbook.add_format(
+            {'bold': True, 'font_color': 'black', 'bg_color': 'white'})
+        col_purple = workbook.add_format(
+            {'bold': True, 'font_color': 'white', 'bg_color': '#7030A0'})
+        col_rosa = workbook.add_format(
+            {'bold': True, 'font_color': 'white', 'bg_color': '#FF9393'})
+
         for d in self.dayList:
             date_str = d.dt.strftime('%Y-%m-%d %H:%M')
             fmt = col_green
@@ -359,6 +366,17 @@ class LiturgicalCalendar():
                         {'header': 'Kleur'},
                         {'header': 'Beschrijving'}
                         ]})
+        worksheet.conditional_format('A1:C{}'.format(
+            row), {'type': 'formula', 'criteria': '$B1="roze"', 'format': col_rosa})
+        worksheet.conditional_format('A1:C{}'.format(
+            row), {'type': 'formula', 'criteria': '$B1="paars"', 'format': col_purple})
+        worksheet.conditional_format('A1:C{}'.format(
+            row), {'type': 'formula', 'criteria': '$B1="groen"', 'format': col_green})
+        worksheet.conditional_format('A1:C{}'.format(
+            row), {'type': 'formula', 'criteria': '$B1="rood"', 'format': col_red})
+        worksheet.conditional_format('A1:C{}'.format(
+            row), {'type': 'formula', 'criteria': '$B1="wit"', 'format': col_white})
+
         worksheet.set_column('A:A', 24)
         worksheet.set_column('B:B', 8)
         worksheet.set_column('C:C', 32)
@@ -409,7 +427,8 @@ function set_liturgical_color(&$light, &$dark, &$font)
             elif (m != cur_month):
                 self.printPHP(4, "break;")   # close previous month
                 cur_month = cur_month + 1
-                self.printPHP(3, "case {}:".format(cur_month))  # open new month
+                self.printPHP(3, "case {}:".format(
+                    cur_month))  # open new month
                 if (cur_color != ColorType.GREEN):
                     self.printPHP(4, "$kleur= '{}';".format(cur_color))
                 while (cur_month < m):     # if we're still not at month, close old and open new month
@@ -447,8 +466,9 @@ function set_liturgical_color(&$light, &$dark, &$font)
                 expr = '=='
                 col = cc_to_color
 
-            self.printPHP(4, "if ($dag {} {}) {{ $kleur = '{}'; }}".format(expr, d, col))
-            
+            self.printPHP(
+                4, "if ($dag {} {}) {{ $kleur = '{}'; }}".format(expr, d, col))
+
             cur_month = m
 
             # print (cc[0].strftime("%a %e %b, %H:%M"), end=" ")
